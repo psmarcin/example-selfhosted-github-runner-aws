@@ -9,7 +9,7 @@ jobs:
   ci:
     name: CI
     runs-on:
-      - example-selfhosted-github-runner-aws-${{ github.run_id }}-${{ github.run_attempt }}
+      - codebuild-example-selfhosted-github-runner-aws-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -19,7 +19,3 @@ jobs:
 
       - name: Run tests
         run: go test -failfast ./... -coverprofile=coverage.txt -covermode=atomic
-        env:
-          REDIS_URI: localhost:6379/0
-          REDIS_URI_NEW: localhost:6379/0
-          AWS_DYNAMODB_ENDPOINT: http://localhost:8000
