@@ -19,22 +19,20 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
-          cache-dependency-path: |
-            ./go.sum
-      # In your GitHub Actions workflow
       - name: Cache Go modules
         uses: actions/cache@v3
         with:
           path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
+            /go/pkg/mod
+            /root/.cache/go-build
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
 
       - name: Run tests
         run: go test -failfast ./... -coverprofile=coverage.txt -covermode=atomic
