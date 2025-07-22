@@ -1,0 +1,43 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-24.04
+    services:
+      redis:
+        image: redis/redis-stack-server:7.4.0-v2
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - "6379:6379"
+      dynamodb:
+        image: amazon/dynamodb-local:1.20.0
+        ports:
+          - "8000:8000"
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+
+      - name: Run tests
+        run: go test -failfast ./... -coverprofile=coverage.txt -covermode=atomic
+        env:
+          REDIS_URI: localhost:6379/0
+          REDIS_URI_NEW: localhost:6379/0
+          AWS_DYNAMODB_ENDPOINT: http://localhost:8000
