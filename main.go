@@ -4,7 +4,7 @@ import "log/slog"
 
 func main() {
 	slog.Info("starting")
-	slog.Info("done")
+	slog.Info("done1")
 }
 
 func add(a, b int) int {
