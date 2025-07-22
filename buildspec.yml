@@ -1,3 +1,7 @@
 version: 0.2
 
 phases:
+cache:
+  paths:
+    - '/root/.cache/**/*'        # Generic cache directory
+    - '/root/go/pkg/mod/**/*'    # Go modules cache
