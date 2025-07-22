@@ -13,7 +13,7 @@ func Test_add(t *testing.T) {
 			"2+2=4",
 			2,
 			2,
-			6,
+			5,
 		},
 	}
 	for _, tt := range tests {
